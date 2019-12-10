@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "528142086911",
+    "firebase_url": "https://emp-building-manager.firebaseio.com",
+    "project_id": "emp-building-manager",
+    "storage_bucket": "emp-building-manager.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:528142086911:android:22c2bf2062e951aa0692ca",
+        "android_client_info": {
+          "package_name": "com.example.buildingmanager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "528142086911-0oj6shdpmuitil19jrqfcj14l2os20dh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBr5QX2633jAtgQ6feOE-4iso0gKOCN34o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "528142086911-0oj6shdpmuitil19jrqfcj14l2os20dh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
