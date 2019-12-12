@@ -3,5 +3,12 @@
     <string name="login_button">Login</string>
     <string name="username_hint">Username</string>
     <string name="password_hint">Password</string>
+    <string name="register_link">New user? Register</string>
+    <string name="name_hint">Name</string>
+    <string name="lastname_hint">Lastname</string>
+    <string name="password_confirm_hint">Confirm password</string>
+    <string name="email_hint">Email</string>
+    <string name="phone_hint">Phone number</string>
+    <string name="register_button">Register</string>
     <!-- Strings related to login -->
 </resources>
