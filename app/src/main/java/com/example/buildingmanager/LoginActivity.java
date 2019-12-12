@@ -7,11 +7,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText username;
-    private EditText password;
+    private EditText username, password;
     private Button login;
 
     @Override
@@ -20,12 +20,12 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         username = findViewById(R.id.usernameField);
-        username = findViewById(R.id.passwordField);
+        password = findViewById(R.id.passwordField);
         login = findViewById(R.id.loginButton);
 
     }
 
-    public void next(View view) {
+    public void goToRegisterView(View view) {
         Intent intent = new Intent(this, RegisterActivity.class);
         startActivity(intent);
     }
