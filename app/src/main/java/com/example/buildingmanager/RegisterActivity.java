@@ -1,20 +1,35 @@
 package com.example.buildingmanager;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 
 public class RegisterActivity extends AppCompatActivity {
 
     private EditText name, lastname, password, confirmPassword, email, phone;
     private Button register;
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        auth = FirebaseAuth.getInstance();
 
         getViewVariables();
         setHomeButton();
@@ -37,7 +52,100 @@ public class RegisterActivity extends AppCompatActivity {
         register = findViewById(R.id.registerButton);
     }
 
-    private void validateInput() {
-        if(name.getText() != null && lastname.getText() != null);
+    public void processRegistration(View view) {
+
+        if(validateInput()){
+            pushData();
+        }
+    }
+
+    private void pushData() {
+        String nameText, lastnameText, passwordText, confirmPasswordText, emailText, phoneText;
+        nameText = name.getText().toString().trim();
+        lastnameText = lastname.getText().toString().trim();
+        passwordText = password.getText().toString().trim();
+        emailText = email.getText().toString().trim();
+        phoneText = phone.getText().toString().trim();
+
+        auth.createUserWithEmailAndPassword(emailText, passwordText).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                Context context = getApplicationContext();
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast;
+
+                toast = Toast.makeText(context, "?", duration);
+                toast.show();
+
+                if(task.isSuccessful()){
+                    toast = Toast.makeText(context, "Registration successful", duration);
+                    toast.show();
+                } else {
+                    FirebaseAuthException e = (FirebaseAuthException )task.getException();
+                    toast = Toast.makeText(context, "Registration failed: " + e.getMessage(), duration);
+                    toast.show();
+                }
+            }
+        });
+    }
+
+    private boolean isEmptyText(String s) {
+        if(s.equals("")){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean validateInput() {
+        Context context = getApplicationContext();
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast;
+
+        String nameText, lastnameText, passwordText, confirmPasswordText, emailText, phoneText;
+        nameText = name.getText().toString();
+        lastnameText = lastname.getText().toString();
+        passwordText = password.getText().toString();
+        confirmPasswordText = confirmPassword.getText().toString();
+        emailText = email.getText().toString();
+        phoneText = phone.getText().toString();
+
+        // Preverimo če so inputi prazni
+        if(isEmptyText(nameText) && isEmptyText(lastnameText) && isEmptyText(passwordText) && isEmptyText(confirmPasswordText) && isEmptyText(emailText) && isEmptyText(phoneText)){
+            // Vsaj nekateri inputi so prazni
+            toast = Toast.makeText(context, context.getString(R.string.sign_in_error), duration);
+            toast.show();
+
+            return false;
+        } else {
+            // Vsi inputi so polni
+            if(!validatePassword()) {
+                toast = Toast.makeText(context, "Gesli se ne ujemata" , duration);
+                toast.show();
+                return false;
+            } else if(!validateEmail()) {
+                toast = Toast.makeText(context, "Email ni prave oblike" , duration);
+                toast.show();
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean validatePassword() {
+        if(password.getText().toString().equals(confirmPassword.getText().toString())){
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean validateEmail() {
+        String mail = email.getText().toString();
+
+        if(mail.matches(".+@.+\\..+")) {
+            return true;
+        }
+
+        return false;
     }
 }
