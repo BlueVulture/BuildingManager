@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.util.Log;
@@ -53,7 +54,6 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public void processRegistration(View view) {
-
         if(validateInput()){
             pushData();
         }
@@ -72,18 +72,13 @@ public class RegisterActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 Context context = getApplicationContext();
                 int duration = Toast.LENGTH_SHORT;
-                Toast toast;
-
-                toast = Toast.makeText(context, "?", duration);
-                toast.show();
 
                 if(task.isSuccessful()){
-                    toast = Toast.makeText(context, "Registration successful", duration);
-                    toast.show();
+                    Toast.makeText(context, "Registration successful", duration).show();
+                    startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
                 } else {
                     FirebaseAuthException e = (FirebaseAuthException )task.getException();
-                    toast = Toast.makeText(context, "Registration failed: " + e.getMessage(), duration);
-                    toast.show();
+                    Toast.makeText(context, "Registration failed: " + e.getMessage(), duration).show();
                 }
             }
         });
@@ -99,7 +94,6 @@ public class RegisterActivity extends AppCompatActivity {
     private boolean validateInput() {
         Context context = getApplicationContext();
         int duration = Toast.LENGTH_SHORT;
-        Toast toast;
 
         String nameText, lastnameText, passwordText, confirmPasswordText, emailText, phoneText;
         nameText = name.getText().toString();
@@ -112,19 +106,16 @@ public class RegisterActivity extends AppCompatActivity {
         // Preverimo če so inputi prazni
         if(isEmptyText(nameText) && isEmptyText(lastnameText) && isEmptyText(passwordText) && isEmptyText(confirmPasswordText) && isEmptyText(emailText) && isEmptyText(phoneText)){
             // Vsaj nekateri inputi so prazni
-            toast = Toast.makeText(context, context.getString(R.string.sign_in_error), duration);
-            toast.show();
+            Toast.makeText(context, context.getString(R.string.sign_in_error), duration).show();
 
             return false;
         } else {
             // Vsi inputi so polni
             if(!validatePassword()) {
-                toast = Toast.makeText(context, "Gesli se ne ujemata" , duration);
-                toast.show();
+                Toast.makeText(context, context.getString(R.string.password_no_match) , duration).show();
                 return false;
-            } else if(!validateEmail()) {
-                toast = Toast.makeText(context, "Email ni prave oblike" , duration);
-                toast.show();
+            } else if(!validateEmail(emailText)) {
+                Toast.makeText(context, context.getString(R.string.email_wrong) , duration).show();
                 return false;
             }
         }
@@ -139,9 +130,7 @@ public class RegisterActivity extends AppCompatActivity {
         return false;
     }
 
-    private boolean validateEmail() {
-        String mail = email.getText().toString();
-
+    private boolean validateEmail(String mail) {
         if(mail.matches(".+@.+\\..+")) {
             return true;
         }
