@@ -33,7 +33,7 @@ public class RegisterActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
 
         getViewVariables();
-        setHomeButton();
+//        setHomeButton();
 
     }
 

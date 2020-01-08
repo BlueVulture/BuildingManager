@@ -42,7 +42,9 @@ public class LoginActivity extends AppCompatActivity {
 
         if(user != null) {
             finish();
+            Toast.makeText(LoginActivity.this, user.getEmail(), Toast.LENGTH_SHORT).show();
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
+
         }
 
     }
@@ -60,9 +62,9 @@ public class LoginActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         FirebaseUser user = auth.getCurrentUser();
                         Toast.makeText(LoginActivity.this, context.getString(R.string.login_success), Toast.LENGTH_SHORT).show();
-                        //startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     } else {
-                        Toast.makeText(LoginActivity.this, context.getString(R.string.login_failed), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, context.getString(R.string.login_failed) + ":", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
