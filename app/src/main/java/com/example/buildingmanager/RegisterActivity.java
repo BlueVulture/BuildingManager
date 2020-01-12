@@ -18,12 +18,18 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
 
     private EditText name, lastname, password, confirmPassword, email, phone;
     private Button register;
     private FirebaseAuth auth;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +37,10 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         auth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
 
         getViewVariables();
 //        setHomeButton();
-
     }
 
     private void setHomeButton () {
@@ -60,7 +66,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void pushData() {
-        String nameText, lastnameText, passwordText, confirmPasswordText, emailText, phoneText;
+        final String nameText, lastnameText, passwordText, confirmPasswordText, emailText, phoneText;
         nameText = name.getText().toString().trim();
         lastnameText = lastname.getText().toString().trim();
         passwordText = password.getText().toString().trim();
@@ -75,6 +81,16 @@ public class RegisterActivity extends AppCompatActivity {
 
                 if(task.isSuccessful()){
                     Toast.makeText(context, "Registration successful", duration).show();
+
+                    FirebaseUser userID = auth.getCurrentUser();
+                    Map<String, Object> user = new HashMap<>();
+                    user.put("name", nameText);
+                    user.put("lastname", lastnameText);
+                    user.put("email", emailText);
+                    user.put("phone", phoneText);
+                    user.put("building", "first");
+                    db.collection("users").document(userID.getUid()).set(user);
+
                     startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
                 } else {
                     FirebaseAuthException e = (FirebaseAuthException )task.getException();
@@ -138,3 +154,4 @@ public class RegisterActivity extends AppCompatActivity {
         return false;
     }
 }
+

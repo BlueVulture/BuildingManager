@@ -15,9 +15,14 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -25,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawer;
     private TextView navNameField;
     private TextView navEmailField;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,25 +38,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
         auth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        final NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        navNameField = findViewById(R.id.nav_name);
-        navEmailField = findViewById(R.id.nav_email);
+        final View headerLayout = navigationView.getHeaderView(0);
 
+        navNameField = headerLayout.findViewById(R.id.nav_name);
+        navEmailField = headerLayout.findViewById(R.id.nav_email);
 
-        try {
-            navEmailField.setText(auth.getCurrentUser().getEmail());
-        } catch(Exception e) {
-                Log.e("ERROR", e.getMessage() );
-            e.getMessage();
-        }
+        DocumentReference docRef = db.collection("users").document(auth.getCurrentUser().getUid());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    navNameField.setText((String)document.getData().get("name") + " " + (String)document.getData().get("lastname"));
+                    navEmailField.setText((String)document.getData().get("email"));
+                    if((Boolean)document.getData().get("admin")){
+                        navigationView.getMenu().findItem(R.id.nav_residents).setVisible(true);
+                    }
 
+                }
+            }
+        });
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
