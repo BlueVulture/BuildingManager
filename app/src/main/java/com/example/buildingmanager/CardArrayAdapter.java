@@ -45,6 +45,8 @@ public class CardArrayAdapter extends ArrayAdapter<Card> {
             viewHolder = new CardViewHolder();
             viewHolder.line1 = (TextView) row.findViewById(R.id.line1);
             viewHolder.line2 = (TextView) row.findViewById(R.id.line2);
+
+
             row.setTag(viewHolder);
         } else {
             viewHolder = (CardViewHolder)row.getTag();

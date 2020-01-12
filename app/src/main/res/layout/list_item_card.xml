@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:paddingLeft="15dp"
     android:paddingRight="15dp"
-    android:descendantFocusability="beforeDescendants">
+    android:descendantFocusability="blocksDescendants">
 
     <LinearLayout
         android:orientation="vertical"
@@ -16,19 +16,20 @@
         android:paddingBottom="15dp"
         android:paddingRight="15dp"
         android:background="@drawable/card_background"
-        android:descendantFocusability="afterDescendants">
+        android:descendantFocusability="afterDescendants"
+        android:layout_gravity="center">
 
         <TextView
             android:id="@+id/line1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Text line 1"/>
+            android:text="Text line 1" />
 
         <TextView
             android:id="@+id/line2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Text line 2"/>
+            android:text="Text line 2" />
 
     </LinearLayout>
 </FrameLayout>
