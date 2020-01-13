@@ -26,7 +26,7 @@ import java.util.Map;
 public class HomeFragment extends Fragment {
     private FirebaseFirestore db;
     private ListView listView;
-    View view;
+    private View view;
     private static final String TAG = "CardListActivity";
     private CardArrayAdapter cardArrayAdapter;
     private Context context;

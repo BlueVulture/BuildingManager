@@ -13,17 +13,17 @@ import androidx.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CardArrayAdapter extends ArrayAdapter<Card> {
+public class TaskArrayAdapter extends ArrayAdapter<Card> {
     private static final String TAG = "CardArrayAdapter";
     private List<Card> cardList = new ArrayList<Card>();
 
-    public CardArrayAdapter(@NonNull Context context, int textViewResourceId) {
+    public TaskArrayAdapter(@NonNull Context context, int textViewResourceId) {
         super(context, textViewResourceId);
     }
     static class CardViewHolder {
         TextView line1;
         TextView line2;
-
+        ImageView imageView;
     }
 
     @Override
@@ -43,10 +43,12 @@ public class CardArrayAdapter extends ArrayAdapter<Card> {
         CardViewHolder viewHolder;
         if (row == null) {
             LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(R.layout.list_item_card, container, false);
+            row = inflater.inflate(R.layout.task_item_card, container, false);
             viewHolder = new CardViewHolder();
             viewHolder.line1 = (TextView) row.findViewById(R.id.line1);
             viewHolder.line2 = (TextView) row.findViewById(R.id.line2);
+            viewHolder.imageView = (ImageView) row.findViewById(R.id.complete_image_view);
+
 
             row.setTag(viewHolder);
         } else {
@@ -55,6 +57,13 @@ public class CardArrayAdapter extends ArrayAdapter<Card> {
         Card card = getItem(position);
         viewHolder.line1.setText(card.getLine1());
         viewHolder.line2.setText(card.getLine2());
+        if(!card.getStatus().isEmpty()) {
+            if(card.getStatus().equals("F")) {
+                viewHolder.imageView.setImageResource(R.drawable.icon_check);
+            } else {
+                viewHolder.imageView.setImageResource(R.drawable.icon_close);
+            }
+        }
 
         return row;
     }
