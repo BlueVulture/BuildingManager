@@ -63,7 +63,7 @@ public class TasksFragment extends Fragment {
                         Log.d("CARDS", s);
                         Timestamp timestamp = (Timestamp) queryResults.get(s).get("subdate");
                         Date date = timestamp.toDate();
-                        Card card = new Card(queryResults.get(s).get("title").toString(), date.toString(), queryResults.get(s).get("status").toString());
+                        Card card = new Card(queryResults.get(s).get("title").toString(), date.toString(), queryResults.get(s).get("status").toString(), s);
                         taskArrayAdapter.add(card);
                     }
                     listView.setAdapter(taskArrayAdapter);

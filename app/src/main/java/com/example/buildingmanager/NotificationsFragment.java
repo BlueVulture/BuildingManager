@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -45,7 +46,15 @@ public class NotificationsFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Card item = (Card) parent.getAdapter().getItem(position);
-                Toast.makeText(context, item.getLine1(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, item.getId(), Toast.LENGTH_SHORT).show();
+                NotificationFragment fragment = new NotificationFragment();
+                Bundle arguments = new Bundle();
+                arguments.putString("id", item.getId());
+                fragment.setArguments(arguments);
+                final FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.fragment_container, fragment);
+                ft.commit();
+
             }
         });
 
@@ -61,12 +70,11 @@ public class NotificationsFragment extends Fragment {
                         queryResults.put(document.getId(), document.getData());
                     }
 
-
                     for (String s : queryResults.keySet()) {
                         Log.d("CARDS", s);
                         Timestamp timestamp = (Timestamp) queryResults.get(s).get("date");
                         Date date = timestamp.toDate();
-                        Card card = new Card(queryResults.get(s).get("title").toString(), date.toString());
+                        Card card = new Card(queryResults.get(s).get("title").toString(), date.toString(), s);
                         cardArrayAdapter.add(card);
                     }
                     listView.setAdapter(cardArrayAdapter);
