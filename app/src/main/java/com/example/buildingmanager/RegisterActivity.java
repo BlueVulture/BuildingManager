@@ -26,7 +26,7 @@ import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private EditText name, lastname, password, confirmPassword, email, phone;
+    private EditText name, lastname, password, confirmPassword, email, phone, building;
     private Button register;
     private FirebaseAuth auth;
     private FirebaseFirestore db;
@@ -57,6 +57,7 @@ public class RegisterActivity extends AppCompatActivity {
         email = findViewById(R.id.emailField);
         phone = findViewById(R.id.phoneField);
         register = findViewById(R.id.registerButton);
+        building = findViewById(R.id.buildingField);
     }
 
     public void processRegistration(View view) {
@@ -66,12 +67,13 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void pushData() {
-        final String nameText, lastnameText, passwordText, confirmPasswordText, emailText, phoneText;
+        final String nameText, lastnameText, passwordText, emailText, phoneText, buildingText;
         nameText = name.getText().toString().trim();
         lastnameText = lastname.getText().toString().trim();
         passwordText = password.getText().toString().trim();
         emailText = email.getText().toString().trim();
         phoneText = phone.getText().toString().trim();
+        buildingText = building.getText().toString().trim();
 
         auth.createUserWithEmailAndPassword(emailText, passwordText).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -88,10 +90,11 @@ public class RegisterActivity extends AppCompatActivity {
                     user.put("lastname", lastnameText);
                     user.put("email", emailText);
                     user.put("phone", phoneText);
-                    user.put("building", "first");
+                    user.put("building", buildingText);
+                    user.put("admin", false);
                     db.collection("users").document(userID.getUid()).set(user);
 
-                    startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                    startActivity(new Intent(RegisterActivity.this, MainActivity.class));
                 } else {
                     FirebaseAuthException e = (FirebaseAuthException )task.getException();
                     Toast.makeText(context, "Registration failed: " + e.getMessage(), duration).show();

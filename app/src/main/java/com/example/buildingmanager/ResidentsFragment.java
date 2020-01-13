@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -43,7 +44,14 @@ public class ResidentsFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Card item = (Card) parent.getAdapter().getItem(position);
-                Toast.makeText(context, item.getLine1(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, item.getId(), Toast.LENGTH_SHORT).show();
+                UserFragment fragment = new UserFragment();
+                Bundle arguments = new Bundle();
+                arguments.putString("id", item.getId());
+                fragment.setArguments(arguments);
+                final FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.fragment_container, fragment);
+                ft.commit();
             }
         });
 

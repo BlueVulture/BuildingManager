@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.auth.User;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -106,6 +108,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_share:
                 signOut();
+                break;
+            case R.id.nav_profile:
+                UserFragment fragment = new UserFragment();
+                Bundle arguments = new Bundle();
+                arguments.putString("id", auth.getCurrentUser().getUid());
+                fragment.setArguments(arguments);
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//                final FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.fragment_container, fragment);
+                ft.commit();
+                break;
+            default:
+                Log.d("NAVID", Integer.toString(item.getItemId()));
                 break;
         }
 

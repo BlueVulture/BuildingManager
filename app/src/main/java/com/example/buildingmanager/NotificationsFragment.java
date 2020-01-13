@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -16,6 +17,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -26,6 +29,8 @@ import java.sql.Time;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class NotificationsFragment extends Fragment {
     private FirebaseFirestore db;
@@ -79,6 +84,23 @@ public class NotificationsFragment extends Fragment {
                     }
                     listView.setAdapter(cardArrayAdapter);
                 }
+            }
+        });
+
+        Button button = (Button) view.findViewById(R.id.save_edit_button);
+        button.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                AddNotificationFragment fragment = new AddNotificationFragment();
+//                Bundle arguments = new Bundle();
+//                arguments.putString("id", item.getId());
+//                fragment.setArguments(arguments);
+                final FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.fragment_container, fragment);
+                ft.commit();
+
             }
         });
         return view;

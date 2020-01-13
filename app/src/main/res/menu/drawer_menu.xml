@@ -21,6 +21,10 @@
             android:icon="@drawable/icon_settings"
             android:title="Settings" />
         <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/icon_residents"
+            android:title="Profile" />
+        <item
             android:id="@+id/nav_residents"
             android:icon="@drawable/icon_residents"
             android:title="Residents"
